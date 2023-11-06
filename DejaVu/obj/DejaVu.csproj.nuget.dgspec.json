@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\user\\source\\repos\\DejaVu\\DejaVu.csproj": {}
+    "C:\\Users\\user\\Desktop\\homework\\HW-S311-2\\DejaVu\\DejaVu.csproj": {}
   },
   "projects": {
-    "C:\\Users\\user\\source\\repos\\DejaVu\\DejaVu.csproj": {
+    "C:\\Users\\user\\Desktop\\homework\\HW-S311-2\\DejaVu\\DejaVu.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\user\\source\\repos\\DejaVu\\DejaVu.csproj",
+        "projectUniqueName": "C:\\Users\\user\\Desktop\\homework\\HW-S311-2\\DejaVu\\DejaVu.csproj",
         "projectName": "DejaVu",
-        "projectPath": "C:\\Users\\user\\source\\repos\\DejaVu\\DejaVu.csproj",
+        "projectPath": "C:\\Users\\user\\Desktop\\homework\\HW-S311-2\\DejaVu\\DejaVu.csproj",
         "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\user\\source\\repos\\DejaVu\\obj\\",
+        "outputPath": "C:\\Users\\user\\Desktop\\homework\\HW-S311-2\\DejaVu\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
