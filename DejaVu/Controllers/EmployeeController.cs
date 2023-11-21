@@ -1,173 +1,95 @@
-﻿using DejaVu.Models;
-using Microsoft.AspNetCore.Mvc;
+﻿
+﻿using Microsoft.AspNetCore.Mvc;
+using DejaVu.Models; // Adjust the namespace if necessary
+using Microsoft.EntityFrameworkCore;
+using System.Threading.Tasks;
 
-
-namespace DejaVu.Controllers
+public class EmployeeController : Controller
 {
-    public class EmployeeController : Controller
+    private readonly EmployeeContext _context;
+
+    public EmployeeController(EmployeeContext context)
     {
-        private List<Employee> _employees;
-
-        public EmployeeController()
-        {
-            _employees = new List<Employee>
-            {
-                new Employee
-                {
-                    Id = 0,
-                    Name = "Martin",
-                    Surname = "Simpson",
-                    BirthDate = new DateTime(1992, 12, 3),
-                    Position = "Marketing Expert",
-                    Image = "/images/Martin.jpg"
-                },
-                new Employee
-                {
-                    Id = 1,
-                    Name = "Jacob",
-                    Surname = "Hawk",
-                    BirthDate = new DateTime(1995, 10, 2),
-                    Position = "Manager",
-                    Image = "/images/Jacob.jpg"
-                },
-                new Employee
-                {
-                    Id = 2,
-                    Name = "Elizabeth",
-                    Surname = "Geil",
-                    BirthDate = new DateTime(2000, 1, 7),
-                    Position = "Software Engineer",
-                    Image = "/images/Elizabeth.jpg"
-                },
-                new Employee
-                {
-                    Id = 3,
-                    Name = "Kate",
-                    Surname = "Metain",
-                    BirthDate = new DateTime(1997, 2, 13),
-                    Position = "Admin",
-                    Image = "/images/Kate.jpg"
-                },
-                new Employee
-                {
-                    Id = 4,
-                    Name = "Michael",
-                    Surname = "Cook",
-                    BirthDate = new DateTime(1990, 12, 25),
-                    Position = "Marketing expert",
-                    Image = "/images/Michael.jpg"
-                },
-                new Employee
-                {
-                    Id = 5,
-                    Name = "John",
-                    Surname = "Snow",
-                    BirthDate = new DateTime(2001, 7, 15),
-                    Position = "Software Engineer",
-                    Image = "/images/John.jpg"
-                },
-                new Employee
-                {
-                    Id = 6,
-                    Name = "Nina",
-                    Surname = "Soprano",
-                    BirthDate = new DateTime(1999, 9, 30),
-                    Position = "Software Engineer",
-                    Image = "/images/Nina.jpg"
-                },
-                new Employee
-                {
-                    Id = 7,
-                    Name = "Tina",
-                    Surname = "Fins",
-                    BirthDate = new DateTime(2000, 5, 14),
-                    Position = "Team Leader",
-                    Image = "/images/Tina.jpg"
-                }
-            };
-        }
-        [HttpGet]
-        public ActionResult Index()
-        {
-            return View(_employees);
-        }
-
-        [HttpGet]
-        public ActionResult Details(int id)
-        {
-            var employee = _employees.FirstOrDefault(e => e.Id == id);
-            return View(employee);
-        }
-
-        [HttpGet]
-        public IActionResult Edit(int id)
-        {
-            var employee = _employees.FirstOrDefault(e => e.Id == id);
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            return View(employee);
-        }
-
-        [HttpPost]
-        public IActionResult Edit(Employee employee)
-        {
-            if (ModelState.IsValid)
-            {
-                // Update the employee data with the posted values
-                var existingEmployee = _employees.FirstOrDefault(e => e.Id == employee.Id);
-                if (existingEmployee != null)
-                {
-                    existingEmployee.Name = employee.Name;
-                    existingEmployee.Surname = employee.Surname;
-                    existingEmployee.BirthDate = employee.BirthDate;
-                    existingEmployee.Position = employee.Position;
-                    
-                }
-
-                
-                return RedirectToAction("Index");
-            }
-
-            return View(employee);
-        }
-
-        [HttpGet]
-        public IActionResult Update(int id)
-        {
-            var employee = _employees.FirstOrDefault(e => e.Id == id);
-            if (employee == null)
-            {
-                return NotFound();
-            }
-
-            return View(employee);
-        }
-
-        [HttpPost]
-        public IActionResult Update(Employee employee)
-        {
-            if (ModelState.IsValid)
-            {
-                
-                var existingEmployee = _employees.FirstOrDefault(e => e.Id == employee.Id);
-                if (existingEmployee != null)
-                {
-                    existingEmployee.Name = employee.Name;
-                    existingEmployee.Surname = employee.Surname;
-                    existingEmployee.BirthDate = employee.BirthDate;
-                    existingEmployee.Position = employee.Position;
-                    
-                }
-
-                
-                return RedirectToAction("Index");
-            }
-
-            return View(employee);
-        }
+        _context = context;
     }
 
+    public async Task<IActionResult> Index()
+    {
+        return View(await _context.Employees.ToListAsync());
+    }
+
+    public async Task<IActionResult> Details(int id)
+    {
+        var employee = await _context.Employees.FirstOrDefaultAsync(e => e.Id == id);
+        if (employee == null)
+        {
+            return NotFound();
+        }
+        return View(employee);
+    }
+
+    public async Task<IActionResult> Edit(int id)
+    {
+        var employee = await _context.Employees.FindAsync(id);
+        if (employee == null)
+        {
+            return NotFound();
+        }
+        return View(employee);
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, Employee employee)
+    {
+        if (id != employee.Id)
+        {
+            return NotFound();
+        }
+
+        if (ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(employee);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!EmployeeExists(employee.Id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+            return RedirectToAction(nameof(Index));
+        }
+        return View(employee);
+    }
+
+    public IActionResult Create()
+    {
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create(Employee employee)
+    {
+        if (ModelState.IsValid)
+        {
+            _context.Add(employee);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        return View(employee);
+    }
+
+    private bool EmployeeExists(int id)
+    {
+        return _context.Employees.Any(e => e.Id == id);
+    }
 }
