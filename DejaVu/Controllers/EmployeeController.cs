@@ -1,4 +1,3 @@
-﻿
 ﻿using Microsoft.AspNetCore.Mvc;
 using DejaVu.Models; // Adjust the namespace if necessary
 using Microsoft.EntityFrameworkCore;

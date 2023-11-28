@@ -21,6 +21,10 @@ namespace DejaVu.Models
         [MinLength(3)]
         public string Position { get; set; }
         public string Image { get; set; }
+
+        public int CompanyId { get; set; } // Foreign key
+        public Company Company { get; set; } // Navigation property
+        public SalaryInfo SalaryInfo { get; set; }
     }
 
 }
