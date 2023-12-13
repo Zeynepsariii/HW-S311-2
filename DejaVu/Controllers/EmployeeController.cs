@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using DejaVu.Models; // Adjust the namespace if necessary
+using DejaVu.Models; 
 using Microsoft.EntityFrameworkCore;
 using System.Threading.Tasks;
 
@@ -35,6 +35,21 @@ public class EmployeeController : Controller
             return NotFound();
         }
         return View(employee);
+    }
+
+    public IActionResult SalaryDetails()
+    {
+        var employees = _context.Employees
+                            .Select(e => new EmployeeSalaryDto
+                            {
+                                Id = e.Id,
+                                FullName = $"{e.Name} {e.Surname}",
+                                CompanyName = e.Company.Name,
+                                NetSalary = e.NetSalary,
+                                GrossSalary = e.GrossSalary
+                            })
+                            .ToList();
+        return View(employees);
     }
 
     [HttpPost]

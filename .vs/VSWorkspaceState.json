@@ -1,8 +1,9 @@
 {
   "ExpandedNodes": [
     "",
-    "\\DejaVu"
+    "\\DejaVu",
+    "\\DejaVu\\Controllers"
   ],
-  "SelectedNode": "\\DejaVu\\DejaVu.csproj",
+  "SelectedNode": "\\DejaVu\\Controllers",
   "PreviewInSolutionExplorer": false
 }

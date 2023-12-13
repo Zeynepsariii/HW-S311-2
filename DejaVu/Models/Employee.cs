@@ -25,6 +25,8 @@ namespace DejaVu.Models
         public int CompanyId { get; set; } // Foreign key
         public Company Company { get; set; } // Navigation property
         public SalaryInfo SalaryInfo { get; set; }
+         public decimal NetSalary { get; set; }
+        public decimal GrossSalary { get; set; }
     }
 
 }
